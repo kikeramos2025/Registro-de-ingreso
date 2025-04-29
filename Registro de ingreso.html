@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro de Ingreso</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #000;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #0033cc;
+      text-align: center;
+    }
+    form {
+      max-width: 700px;
+      margin: auto;
+      background-color: #f2f2f2;
+      padding: 20px;
+      border: 2px solid #cc0000;
+      border-radius: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #0033cc;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Registro de Ingreso</h1>
+  <form id="registroForm">
+    <label>Nombre completo:
+      <input type="text" name="nombre" required />
+    </label>
+    <label>Edad:
+      <input type="number" name="edad" required />
+    </label>
+    <label>Condición médica:
+      <input type="text" name="condicion" required />
+    </label>
+    <label>Sexo:
+      <select name="sexo" required>
+        <option value="">Seleccione</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+      </select>
+    </label>
+    <label>Teléfono (10 dígitos):
+      <input type="text" name="telefono" pattern="[0-9]{10}" required />
+    </label>
+    <label>Correo electrónico:
+      <input type="email" name="correo" required />
+    </label>
+    <label>Nombre del tutor:
+      <input type="text" name="tutor" required />
+    </label>
+    <label>Dirección:
+      <input type="text" name="direccion" required />
+    </label>
+    <label>Ciudad:
+      <input type="text" name="ciudad" required />
+    </label>
+    <label>Estado:
+      <input type="text" name="estado" required />
+    </label>
+    <label>Fecha de registro:
+      <input type="date" name="fecha" required />
+    </label>
+    <label>Comentario:
+      <textarea name="comentario"></textarea>
+    </label>
+    <button type="submit">Registrar</button>
+  </form>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC-CMUkwpwwU6TsPJf-o85rixY4EtWWZnE",
+      authDomain: "enrique-ramos-1f5ff.firebaseapp.com",
+      projectId: "enrique-ramos-1f5ff",
+      storageBucket: "enrique-ramos-1f5ff.appspot.com",
+      messagingSenderId: "445084229684",
+      appId: "1:445084229684:web:f160e78ac5c4db7f716a61"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.getElementById('registroForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const form = e.target;
+      const data = {
+        nombre: form.nombre.value,
+        edad: form.edad.value,
+        condicion: form.condicion.value,
+        sexo: form.sexo.value,
+        telefono: form.telefono.value,
+        correo: form.correo.value,
+        tutor: form.tutor.value,
+        direccion: form.direccion.value,
+        ciudad: form.ciudad.value,
+        estado: form.estado.value,
+        fecha: form.fecha.value,
+        comentario: form.comentario.value,
+      };
+
+      try {
+        await addDoc(collection(db, "beneficiarios"), data);
+        alert("Registro exitoso.");
+        form.reset();
+      } catch (error) {
+        console.error("Error al registrar:", error);
+        alert("Error al registrar. Intenta de nuevo.");
+      }
+    });
+  </script>
+</body>
+</html>
